@@ -1,6 +1,7 @@
 const multer = require("multer");
 
 const csvFilter = (req, file, cb) => {
+  console.log('File Type', file);
   if (file.mimetype.includes("csv")) {
     cb(null, true);
   } else {
