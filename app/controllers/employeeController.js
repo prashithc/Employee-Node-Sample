@@ -35,7 +35,7 @@ exports.create = (req, res) => {
         .on("data", (row) => {
           employeeList.push(row);
         })
-        .on("end", () => {
+        .on("end", () => {          //parcing completed
           //console.log('employeeList ',employeeList);        //parsed Employee list
           
           

@@ -6,8 +6,10 @@ const app = express();
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 
+//base directory in project folder
 global.__basedir = __dirname + "/";
 
+//middleware
 app.use(express.urlencoded({ extended: true }));    
 app.use(express.static('public'));
 
