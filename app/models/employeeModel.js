@@ -43,7 +43,7 @@ ExcelDetails.exportCSV = (newExcelDetails, result) => {
 //Create a new Employee
 Employee.create = (newEmployee, result) => {
     //console.log('newEmployee',newEmployee);
-    const {emp_id, emp_join_date, emp_name, emp_address, exl_id}=newEmployee;             //access object from newEmployee
+    const {emp_id, emp_join_date, emp_name, emp_address, exl_id}=newEmployee;             //access object from newEmployee 
     pool.query("INSERT INTO employee_details (emp_id, emp_join_date, emp_name, emp_address, exl_id) VALUES($1, $2, $3, $4, $5)", [emp_id, emp_join_date, emp_name, emp_address, exl_id], (err, res) => {
       try {
             if (err) {
