@@ -10,10 +10,44 @@ const Employee = function(employee) {
 };
 
 
+// constructor
+const ExcelDetails = function(excelDetails) {
+  //this.exl_id = excelDetails.exl_id;
+  this.exl_name = excelDetails.exl_name;    
+  this.exl_details = excelDetails.exl_details;
+  this.exl_uploaded_date = excelDetails.exl_uploaded_date;   
+  
+};
+
+
+//export CSV file
+ExcelDetails.exportCSV = (newExcelDetails, result) => {
+  console.log('newExcelDetails',newExcelDetails);
+  const {exl_name, exl_details, exl_uploaded_date}=newExcelDetails;             //access object from ExcelDetails
+  pool.query("INSERT INTO export_excel (exl_name, exl_details, exl_uploaded_date) VALUES($1, $2, $3)", [exl_name, exl_details, exl_uploaded_date], (err, res) => {
+    try {
+          if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+          }
+          
+          //console.log(res);
+          console.log("created excel: ", {...newExcelDetails });
+          result(null, { ...newExcelDetails });
+    } catch (error) {
+      result(error, null);
+    }
+    
+  });
+};
+
+
+
 //Create a new Employee
 Employee.create = (newEmployee, result) => {
     console.log('newEmployee',newEmployee);
-    const {emp_id, emp_join_date, emp_name, emp_address, exl_id}=newStudent;             //access object from newEmployee
+    const {emp_id, emp_join_date, emp_name, emp_address, exl_id}=newEmployee;             //access object from newEmployee
     pool.query("INSERT INTO employee_details (emp_id, emp_join_date, emp_name, emp_address, exl_id) VALUES($1, $2, $3, $4, $5)", [emp_id, emp_join_date, emp_name, emp_address, exl_id], (err, res) => {
       try {
             if (err) {
