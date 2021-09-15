@@ -39,7 +39,7 @@ exports.create = (req, res) => {
           
           
           //call saveExcel( )
-          let exl_name= "EMP_Details";           
+          let exl_name= "Emp_Details";           
           let exl_details="Employee Details";
           let exl_uploaded_date=new Date();
 
