@@ -26,6 +26,7 @@ exports.create = (req, res) => {
         let path = __basedir + "uploads/" + req.file.filename;
         console.log('path ',path);
 
+        //parse csv file
         fs.createReadStream(path)
         .pipe(fastcsv.parse({ headers: true }))
         .on("error", (error) => {
@@ -35,7 +36,7 @@ exports.create = (req, res) => {
           tutorials.push(row);
         })
         .on("end", () => {
-          console.log('tutorials ',tutorials);        //Employee list
+          console.log('tutorials ',tutorials);        //parsed Employee list
           
           
           //call saveExcel( )
@@ -47,7 +48,7 @@ exports.create = (req, res) => {
           console.log('save Excel',excel);
 
 
-          saveExcel(excel, dataExcel => {
+          saveExcel(req, res, excel, dataExcel => {
             console.log('saveExcel', dataExcel);
 
 
@@ -64,7 +65,7 @@ exports.create = (req, res) => {
               console.log('save Employee',employee);
   
               //save Employee to database
-              saveEmployee(employee, data => {
+              saveEmployee(req, res, employee, data => {
                   console.log('saveEmployee', data);
               });
   
@@ -87,7 +88,7 @@ exports.create = (req, res) => {
 }
 
 //save to DB
-const saveExcel = (excel, data) =>{
+const saveExcel = (req, res, excel, data) =>{
 
   employeeService.exportExcel(excel, (err, data) => { 
     console.log('createExcel',excel);
@@ -103,7 +104,7 @@ const saveExcel = (excel, data) =>{
 
 
 //save Employee
-const saveEmployee = (employee, data) =>{
+const saveEmployee = (req, res, employee, data) =>{
     employeeService.createEmployee(employee, (err, data) => { 
       console.log('createEmployee',employee);
       if (err)

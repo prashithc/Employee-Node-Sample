@@ -80,3 +80,5 @@ Employee.getAllEmployees = async () => {
 
 //exports the constructor otherwise constructor undefined error occured
 module.exports = Employee;
+
+module.exports = ExcelDetails;
