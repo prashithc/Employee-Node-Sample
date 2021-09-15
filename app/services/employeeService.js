@@ -1,9 +1,9 @@
-const employeeModel = require("../models/employeeModel.js");
+const {Employee, ExcelDetails} = require("../models/employeeModel.js");
 
 //export excel to database
 exports.exportExcel= (excel, data) => {
-    console.log("Create excel data in DB: ", excel);
-    employeeModel.exportCSV(excel, (err, result) => {
+    //console.log("Create excel data in DB: ", excel);
+    ExcelDetails.exportCSV(excel, (err, result) => {
         if (err) {
             console.log("error: ", err);
             data(err, null);
@@ -17,8 +17,8 @@ exports.exportExcel= (excel, data) => {
 
 //Create employee
 exports.createEmployee= (employee, data) => {
-    console.log("Create new employee: ", employee);
-    employeeModel.create(employee, (err, result) => {
+    //console.log("Create new employee: ", employee);
+    Employee.create(employee, (err, result) => {
         if (err) {
             console.log("error: ", err);
             data(err, null);

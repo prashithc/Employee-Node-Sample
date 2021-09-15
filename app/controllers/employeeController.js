@@ -21,10 +21,10 @@ exports.create = (req, res) => {
           return res.status(400).send("Please upload a CSV file!");
         }
   
-        let tutorials = [];
+        let employeeList = [];
         
         let path = __basedir + "uploads/" + req.file.filename;
-        console.log('path ',path);
+        //console.log('path ',path);
 
         //parse csv file
         fs.createReadStream(path)
@@ -33,26 +33,30 @@ exports.create = (req, res) => {
           throw error.message;
         })
         .on("data", (row) => {
-          tutorials.push(row);
+          employeeList.push(row);
         })
         .on("end", () => {
-          console.log('tutorials ',tutorials);        //parsed Employee list
+          //console.log('employeeList ',employeeList);        //parsed Employee list
           
           
           //saveExcel( )
-          let exl_name= "Emp_Details";           
-          let exl_details="Employee Details";
-          let exl_uploaded_date=new Date();
+          let exl_name= req.file.filename;           
+          let exl_details= path;
+          let exl_uploaded_date= new Date();
 
           let excel = {exl_name, exl_details, exl_uploaded_date};
-          console.log('save Excel',excel);
+          //console.log('save Excel',excel);
 
           //call saveExcel( )
-          saveExcel(req, res, excel, dataExcel => {
-            console.log('saveExcel', dataExcel);
+          saveExcel(excel, (dataExcel) => {
+            console.log('dataExcel');
+            if(dataExcel.exl_id == 0){
+                res.send("Error on saveExcel");
+            }
 
-
-            tutorials.map(row =>{
+            employeeList.map((row, index) =>{
+              
+              //console.log('row',row);
 
               //save Employee to database
               let emp_id= row["EMP_ID"]; 
@@ -61,20 +65,23 @@ exports.create = (req, res) => {
               let emp_address = row["Address"]; 
               let exl_id = dataExcel.exl_id;
   
-              console.log('emp_id',emp_id);
+              
               let employee = {emp_id, emp_join_date, emp_name, emp_address, exl_id};
-              console.log('save Employee',employee);
+              //console.log('save Employee',employee);
   
               //call saveEmployee
-              saveEmployee(req, res, employee, data => {
-                  console.log('saveEmployee', data);
-              });
-  
-            });  
+              saveEmployee(employee, (dataEmployee) => {
+                  //console.log('saveEmployee', dataEmployee);
+                  if(!dataEmployee.emp_id){
+                      res.send("Error on saveEmployee");
+                  }
+                  if(index+1 == employeeList.length){     //index and length
+                      res.send("Excel uploaded successfully");
+                  }
+              });  
+            });
 
-
-        });  
-
+          });
         });
 
     } catch (error) {
@@ -83,40 +90,36 @@ exports.create = (req, res) => {
           message: "Could not upload the file: " + req.file.originalname,
         });
     }
-
-      
-
 }
 
-//save to DB
-const saveExcel = (req, res, excel, data) =>{
-
+//save Excel to DB
+const saveExcel = (excel, dataExcel) =>{
   employeeService.exportExcel(excel, (err, data) => { 
-    console.log('createExcel',excel);
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while uploading the excel."
-    });
-    else 
-      res.send(data);    
+    //console.log('createExcel',excel);
+    if (err){
+        let error = err.message || "Some error occurred while uploading the excel.";
+        dataExcel(error);
+    }    
+    else{
+      //console.log('data', data);
+      dataExcel(data);
+    }          
   });
-}
+};
 
 
 //save Employee
-const saveEmployee = (req, res, employee, data) =>{
+const saveEmployee = (employee, dataEmployee) =>{
     employeeService.createEmployee(employee, (err, data) => { 
-      console.log('createEmployee',employee);
-      if (err)
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the employee."
-      });
+      //console.log('createEmployee',employee);
+      if (err){
+          let error =err.message || "Some error occurred while creating the employee."
+          dataEmployee(error);
+      }
       else 
-        res.send(data);    
+        dataEmployee(data);    
     });
-  }
+};
 
 
 // Fetch all employees from DB
