@@ -39,7 +39,7 @@ exports.create = (req, res) => {
           console.log('tutorials ',tutorials);        //parsed Employee list
           
           
-          //call saveExcel( )
+          //saveExcel( )
           let exl_name= "Emp_Details";           
           let exl_details="Employee Details";
           let exl_uploaded_date=new Date();
@@ -47,13 +47,14 @@ exports.create = (req, res) => {
           let excel = {exl_name, exl_details, exl_uploaded_date};
           console.log('save Excel',excel);
 
-
+          //call saveExcel( )
           saveExcel(req, res, excel, dataExcel => {
             console.log('saveExcel', dataExcel);
 
 
             tutorials.map(row =>{
 
+              //save Employee to database
               let emp_id= row["EMP_ID"]; 
               let emp_join_date=row["Joining_Date"]; 
               let emp_name=row["Name"]; 
@@ -64,7 +65,7 @@ exports.create = (req, res) => {
               let employee = {emp_id, emp_join_date, emp_name, emp_address, exl_id};
               console.log('save Employee',employee);
   
-              //save Employee to database
+              //call saveEmployee
               saveEmployee(req, res, employee, data => {
                   console.log('saveEmployee', data);
               });
