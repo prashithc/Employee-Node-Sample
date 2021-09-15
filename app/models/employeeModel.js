@@ -12,7 +12,6 @@ const Employee = function(employee) {
 
 // constructor
 const ExcelDetails = function(excelDetails) {
-  //this.exl_id = excelDetails.exl_id;
   this.exl_name = excelDetails.exl_name;    
   this.exl_details = excelDetails.exl_details;
   this.exl_uploaded_date = excelDetails.exl_uploaded_date;   
