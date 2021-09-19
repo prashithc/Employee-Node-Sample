@@ -177,7 +177,7 @@ exports.createExcel = (req, res) => {
 
             
       let path = __basedir + "uploads/" + req.file.filename;
-      console.log('path ',path);
+      //console.log('path ',path);
 
 
 
@@ -192,6 +192,22 @@ exports.createExcel = (req, res) => {
       var worksheet = exl.Sheets[y];
       //getting the complete sheet
       // console.log(worksheet);
+
+
+
+      /* const columnA = Object.keys(worksheet).filter(x => /^A\d+/.test(x)).map(x => worksheet[x].v)
+         console.log('columnA', columnA); */
+
+      //excel column header iteration
+      const xlsxFile = require('read-excel-file/node');
+
+      xlsxFile('Emp Details.xlsx').then((rows) => {for (i in rows){
+      for (j in rows[i]){
+      console.dir(rows[i][j]);}
+      }})
+
+
+
 
       var headers = {};
       var data = [];
@@ -221,7 +237,6 @@ exports.createExcel = (req, res) => {
       }
       //drop those first two rows which are empty
       data.shift();
-      //data.shift();
       console.log(data);
 
         //call savetoDB 
