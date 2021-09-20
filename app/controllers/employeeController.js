@@ -7,7 +7,9 @@ const fastcsv = require("fast-csv");
 
 //to read & parse Excel file
 var XLSX = require("xlsx");
-var columnArr = [];
+
+//globally declared
+global.columnArr = [];
 
 // Create and Save a new employee
 exports.create = (req, res) => {
@@ -111,23 +113,24 @@ const savetoDB = (req, res, employeeList) => {
       let emp_address = "";
 
       //save Employee to database
-      console.log("columnArr ", columnArr);
+      console.log('columnArr',columnArr);
       if (columnArr != undefined && columnArr.length > 0) {
-        emp_id = columnArr[0];
-        emp_join_date = columnArr[1];
-        emp_name = columnArr[2];
-        emp_address = columnArr[3];
-      } else {
+        emp_id = row[columnArr[0]];
+        emp_join_date = row[columnArr[1]];
+        emp_name = row[columnArr[2]];
+        emp_address = row[columnArr[3]];
+      } 
+      /*else {
         emp_id = row["EMP ID"];
         emp_join_date = row["Joining Date"];
         emp_name = row["Name"];
         emp_address = row["Address"];
-      }
+      } */
 
       let exl_id = dataExcel.exl_id;
 
       let employee = { emp_id, emp_join_date, emp_name, emp_address, exl_id };
-      //console.log('save Employee',employee);
+      console.log('save Employee',employee);
 
       //call saveEmployee
       saveEmployee(employee, (dataEmployee) => {
@@ -184,39 +187,36 @@ exports.createExcel = (req, res) => {
     var exl = XLSX.readFile(path);
 
     var sheet_name_list = exl.SheetNames;
-    console.log(sheet_name_list); // getting as Sheet1
+    //console.log(sheet_name_list); // getting as Sheet1
 
     sheet_name_list.forEach(function (y) {
       var worksheet = exl.Sheets[y];
       //getting the complete sheet
-      // console.log(worksheet);
 
-      /* const columnA = Object.keys(worksheet).filter(x => /^A\d+/.test(x)).map(x => worksheet[x].v)
-         console.log('columnA', columnA); */
 
-      //excel column header iteration
-      const xlsxFile = require("read-excel-file");
-
-      xlsxFile(exl).then((rows) => {
+      //excel column header iteration      
+      const xlsxFile = require('read-excel-file/node');
+      columnArr = [];    //clear columnArr
+      xlsxFile(path).then((rows) => {
         for (i in rows) {
-          for (j in rows[i]) {
-            console.dir("rows ", rows[i][j]);
-            if (i == 0) {
-              columnArr.push(rows[i][j]);
+            for (j in rows[i]) {
+                 if (i == 0 ) {
+                    columnArr.push(`${rows[i][j]}`);        //converts to string
+                    //console.log('columnArr Push', `${rows[i][j]}`);         
+                 }
             }
-          }
         }
-      });
+        //console.log('ColumnArray1', columnArr); 
+      }); 
 
       var headers = {};
       var data = [];
       for (z in worksheet) {
         if (z[0] === "!") continue;
+
         //parse out the column, row, and value
         var col = z.substring(0, 1);
         // console.log(col);
-
-        //console.log('z',z);
 
         var row = parseInt(z.substring(1));
         // console.log(row);
@@ -231,7 +231,7 @@ exports.createExcel = (req, res) => {
           continue;
         }
 
-        if (!data[row]) data[row] = {};
+        if (!data[row]) data[row] = {};     // if undefined
         data[row][headers[col]] = value;
       }
       //drop those first two rows which are empty
