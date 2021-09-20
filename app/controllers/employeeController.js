@@ -195,12 +195,12 @@ exports.createExcel = (req, res) => {
          console.log('columnA', columnA); */
 
       //excel column header iteration
-      const xlsxFile = require("read-excel-file/node");
+      const xlsxFile = require("read-excel-file");
 
-      xlsxFile("Emp Details.xlsx").then((rows) => {
+      xlsxFile(exl).then((rows) => {
         for (i in rows) {
           for (j in rows[i]) {
-            //console.dir("rows ", rows[i][j]);
+            console.dir("rows ", rows[i][j]);
             if (i == 0) {
               columnArr.push(rows[i][j]);
             }
