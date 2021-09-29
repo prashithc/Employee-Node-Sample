@@ -33,7 +33,7 @@ exports.createEmployee= (employee, data) => {
 //Fetch all Employees 
 exports.getAllEmployees= async () => {
     console.log('getAllEmployees');
-    let allEmployees = await employee.getAllEmployees();      
+    let allEmployees = await Employee.getAllEmployees();      
     return allEmployees; 
 };
 
