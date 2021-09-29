@@ -1,7 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");    //for set content type & datatype to convert JSON format
+const cors = require("cors");       //for avoid cross origin exception from Angular to Nodejs
 
 const app = express();
+
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
