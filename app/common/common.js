@@ -1,5 +1,3 @@
-let employeeArray = [];
-
 var apiJSONObject = {
        
     "header": {
@@ -12,7 +10,7 @@ var apiJSONObject = {
               "Employee #",
               "Name"
         ],
-        "employee_address": [
+        "empAddress": [
               "emp_address",
               "employee address",
               "EmployeeAddress",
@@ -21,5 +19,8 @@ var apiJSONObject = {
     }
   };
 
-var empList = apiJSONObject.header.employee;
-var empAddress = apiJSONObject.header.employee_address;
+//var empList = apiJSONObject.header.employee;
+//var empAddress = apiJSONObject.header.employee_address;
+var header = apiJSONObject.header;
+
+module.exports = {header};

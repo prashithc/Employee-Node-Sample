@@ -1,6 +1,6 @@
 const employeeService = require("../services/employeeService.js");
 const employeeMoedel = require("../models/employeeModel.js");
-const common = require("../common/common.js");
+const {header} = require("../common/common.js");
 
 //to read CSV file
 const fs = require("fs");
@@ -12,11 +12,6 @@ var XLSX = require("xlsx");
 //globally declared
 global.columnArr = [];
 
-
-//for template
-var checkArray = [];
-checkArray=common.empList;
-console.log('checkArray', checkArray);
 
 // Create and Save a new employee
 exports.create = (req, res) => {
@@ -121,11 +116,26 @@ const savetoDB = (req, res, employeeList) => {
 
       //save Employee to database
       console.log('columnArr',columnArr);
+      //console.log('checkArray', checkArray);
       if (columnArr != undefined && columnArr.length > 0) {
+
         emp_id = row[columnArr[0]];
         emp_join_date = row[columnArr[1]];
-        emp_name = checkArray.includes(row[columnArr[2]]);        
-        emp_address = row[columnArr[3]];
+
+        header.employee.map((data) => { 
+          let index = columnArr.findIndex(p => p == data);        //compare data and columnArr & find index from the array
+          if (index != -1) {          // if false -1 or true index
+            console.log('index', index);
+            emp_name = row[columnArr[index]];
+          }
+        });       
+        
+        header.empAddress.map((data) => {       
+          let index = columnArr.findIndex(p => p == data);
+          if (index != -1){
+            emp_address = row[columnArr[index]];
+          }
+        });
       } 
       /*else {
         emp_id = row["EMP ID"];
