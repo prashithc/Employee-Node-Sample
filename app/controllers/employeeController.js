@@ -12,6 +12,12 @@ var XLSX = require("xlsx");
 //globally declared
 global.columnArr = [];
 
+
+//for template
+var checkArray = [];
+checkArray=common.empList;
+console.log('checkArray', checkArray);
+
 // Create and Save a new employee
 exports.create = (req, res) => {
   // Validate request
@@ -118,7 +124,7 @@ const savetoDB = (req, res, employeeList) => {
       if (columnArr != undefined && columnArr.length > 0) {
         emp_id = row[columnArr[0]];
         emp_join_date = row[columnArr[1]];
-        emp_name = row[columnArr[2]];
+        emp_name = checkArray.includes(row[columnArr[2]]);        
         emp_address = row[columnArr[3]];
       } 
       /*else {

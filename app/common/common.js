@@ -12,7 +12,7 @@ var apiJSONObject = {
               "Employee #",
               "Name"
         ],
-        "emp_address": [
+        "employee_address": [
               "emp_address",
               "employee address",
               "EmployeeAddress",
@@ -22,4 +22,4 @@ var apiJSONObject = {
   };
 
 var empList = apiJSONObject.header.employee;
-var empAddress = apiJSONObject.header.emp_address;
+var empAddress = apiJSONObject.header.employee_address;
